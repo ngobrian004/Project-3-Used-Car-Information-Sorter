@@ -17,46 +17,48 @@ def merge(arr, left, mid, right):
     n1 = mid - left + 1
     n2 = right - mid
 
-    X = [0] * n1
-    Y = [0] * n2
+    x = [0] * n1
+    y = [0] * n2
 
     for i in range(n1):
-        X[i] = arr[left + i]
+        x[i] = arr[left + i]
     for j in range(n2):
-        Y[j] = arr[mid + 1 + j]
+        y[j] = arr[mid + 1 + j]
 
     # Merge the arrays X and Y into arr
     i, j, k = 0, 0, left
     while i < n1 and j < n2:
-        if X[i] <= Y[j]:
-            arr[k] = X[i]
+        if x[i] <= y[j]:
+            arr[k] = x[i]
             i += 1
         else:
-            arr[k] = Y[j]
+            arr[k] = y[j]
             j += 1
         k += 1
 
     # When we run out of elements in either X or Y append the remaining elements
     while i < n1:
-        arr[k] = X[i]
+        arr[k] = x[i]
         i += 1
         k += 1
 
     while j < n2:
-        arr[k] = Y[j]
+        arr[k] = y[j]
         j += 1
         k += 1
 
+
 def merge_sort(arr, left, right):
     if left < right:
-        # mid is the point where the array is divided into two subarrays
+        # mid is the point where the array is divided into two sub-arrays
         mid = left + (right - left) // 2
 
         merge_sort(arr, left, mid)
         merge_sort(arr, mid + 1, right)
 
-        # Merge the sorted subarrays
+        # Merge the sorted sub-arrays
         merge(arr, left, mid, right)
+
 
 def heap_sort(arr, n):
     for i in range((n // 2) - 1, -1, -1):
@@ -74,9 +76,9 @@ def heapify(arr, n, i):
     left = (2 * i) + 1
     right = (2 * i) + 2
 
-    if left < n & arr[left] < arr[larger]:
+    if left < n and arr[left] > arr[larger]:
         larger = left
-    if right < n & arr[right] < arr[larger]:
+    if right < n and arr[right] > arr[larger]:
         larger = right
 
     if larger != i:
@@ -98,15 +100,13 @@ def year(arr):
 
     print("Number of cars for each year (Heap Sort):")
     year_count_heap = {}
-    for y in heap_copy:
-        if y in year_count_heap:
-            year_count_heap[y] += 1
+    for x in heap_copy:
+        if x in year_count_heap:
+            year_count_heap[x] += 1
         else:
-            year_count_heap[y] = 1
-    for year in sorted(year_count_heap.keys()):
+            year_count_heap[x] = 1
+    for year in year_count_heap.keys():
         print(f"{year}: {year_count_heap[year]} cars")
-
-
 
     start = time.time()
     merge_sort(merge_copy, 0, len(merge_copy) - 1)
@@ -116,23 +116,18 @@ def year(arr):
 
     print("Number of cars for each year (Merge Sort):")
     year_count_merge = {}
-    for y in merge_copy:
-        if y in year_count_merge:
-            year_count_merge[y] += 1
+    for x in merge_copy:
+        if x in year_count_merge:
+            year_count_merge[x] += 1
         else:
-            year_count_merge[y] = 1
-    for year in sorted(year_count_merge.keys()):
+            year_count_merge[x] = 1
+    for year in year_count_merge.keys():
         print(f"{year}: {year_count_merge[year]} cars")
-    # prints out every year for merge copy (used for testing)
-    print("\nPrices after Merge Sort:")
-    for year in merge_copy:
-        print(year)
-
 
     if (merge_copy == heap_copy).all():
-        print("\nSuccess")
+        print("\nSuccess\n")
     else:
-        print("\nFailed")
+        print("\nFailed\n")
 
 
 def price(arr):
@@ -147,19 +142,19 @@ def price(arr):
 
     print("\nNumber of cars for each price category (Heap Sort):")
     price_count_heap = {}
-    for y in heap_copy:
-        category = (y // 10000) * 10000
+    for x in heap_copy:
+        category = (x // 10000) * 10000
         if category in price_count_heap:
             price_count_heap[category] += 1
         else:
             price_count_heap[category] = 1
-    for category in sorted(price_count_heap.keys()):
+    for category in price_count_heap.keys():
         print(f"${category} - ${category + 9999}: {price_count_heap[category]} cars")
 
-    #prints out every price for heap copy (used for testing)
-    #print("\nPrices after Heap Sort:")
-    #for prices in heap_copy:
-        #print(prices)
+    # prints out every price for heap copy (used for testing)
+    # print("\nPrices after Heap Sort:")
+    # for prices in heap_copy:
+    # print(prices)
 
     start = time.time()
     merge_sort(merge_copy, 0, len(merge_copy) - 1)
@@ -169,41 +164,128 @@ def price(arr):
 
     print("\nNumber of cars for each price category (Merge Sort):")
     price_count_merge = {}
-    for y in merge_copy:
-        category = (y // 10000) * 10000
+    for x in merge_copy:
+        category = (x // 10000) * 10000
         if category in price_count_merge:
             price_count_merge[category] += 1
         else:
             price_count_merge[category] = 1
-    for category in sorted(price_count_merge.keys()):
+    for category in price_count_merge.keys():
         print(f"${category} - ${category + 9999}: {price_count_merge[category]} cars")
 
     if (merge_copy == heap_copy).all():
-        print("\nSuccess")
+        print("\nSuccess\n")
     else:
-        print("\nFailed")
+        print("\nFailed\n")
 
 
-def manufacturer():
-    print("test")
+def manufacturer(arr):
+    heap_copy = arr.copy()
+    merge_copy = arr.copy()
+
+    start = time.time()
+    heap_sort(heap_copy, len(heap_copy))
+    end = time.time()
+    length = end - start
+    print("\nHeap sort:", length, "seconds")
+
+    print("\nNumber of cars for each manufacturer (Heap Sort):")
+    manufacturer_count_heap = {}
+    for x in heap_copy:
+        if x in manufacturer_count_heap:
+            manufacturer_count_heap[x] += 1
+        else:
+            manufacturer_count_heap[x] = 1
+    for category in manufacturer_count_heap.keys():
+        print(f"{category.title()}: {manufacturer_count_heap[category]} cars")
+
+    start = time.time()
+    merge_sort(merge_copy, 0, len(merge_copy) - 1)
+    end = time.time()
+    length = end - start
+    print("\nMerge sort:", length, "seconds")
+
+    print("\nNumber of cars for each manufacturer  (Merge Sort):")
+    manufacturer_count_merge = {}
+    for x in merge_copy:
+        if x in manufacturer_count_merge:
+            manufacturer_count_merge[x] += 1
+        else:
+            manufacturer_count_merge[x] = 1
+    for category in manufacturer_count_merge.keys():
+        print(f"{category.title()}: {manufacturer_count_merge[category]} cars")
+
+    if (merge_copy == heap_copy).all():
+        print("\nSuccess\n")
+    else:
+        print("\nFailed\n")
 
 
-def condition():
-    print("test")
+def condition(arr):
+    heap_copy = arr.copy()
+    merge_copy = arr.copy()
+    dict_order = ['new', 'like new', 'excellent', 'good', 'fair', 'salvage']
+
+    start = time.time()
+    heap_sort(heap_copy, len(heap_copy))
+    end = time.time()
+    length = end - start
+    print("\nHeap sort:", length, "seconds")
+
+    print("\nNumber of cars in each condition (Heap Sort):")
+    condition_count_heap = {}
+    for x in heap_copy:
+        if x in condition_count_heap:
+            condition_count_heap[x] += 1
+        else:
+            condition_count_heap[x] = 1
+    res = {key: condition_count_heap[key] for key in dict_order}
+    for category in res.keys():
+        print(f"{category.title()}: {condition_count_heap[category]} cars")
+
+    start = time.time()
+    merge_sort(merge_copy, 0, len(merge_copy) - 1)
+    end = time.time()
+    length = end - start
+    print("\nMerge sort:", length, "seconds")
+
+    print("\nNumber of cars in each condition (Merge Sort):")
+    condition_count_merge = {}
+    for x in merge_copy:
+        if x in condition_count_merge:
+            condition_count_merge[x] += 1
+        else:
+            condition_count_merge[x] = 1
+    res = {key: condition_count_heap[key] for key in dict_order}
+    for category in res.keys():
+        print(f"{category.title()}: {condition_count_merge[category]} cars")
+
+    if (merge_copy == heap_copy).all():
+        print("\nSuccess\n")
+    else:
+        print("\nFailed\n")
 
 
 def main():
-    num_commands = int(input("Number of commands? "))
+    while True:
+        num_commands = input("Number of commands? ")
+        if num_commands.isnumeric():
+            num_commands = int(num_commands)
+            break
+        else:
+            print("That is not a valid input.")
+            continue
+
     for x in range(num_commands):
-        command = input("Choose between year, price, manufacturer, and condition: ")
+        command = input("Choose between year, price, manufacturer, and condition: ").lower()
         if command == "year":
             year(year_arr)
         elif command == "price":
             price(price_arr)
         elif command == "manufacturer":
-            manufacturer()
+            manufacturer(manufacturer_arr)
         elif command == "condition":
-            condition()
+            condition(condition_arr)
         else:
             print(f"Unknown command: {command}")
 
