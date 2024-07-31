@@ -1,6 +1,7 @@
 import pandas as pd
 import time
 
+
 # Read the CSV file into a pandas DataFrame
 df = pd.read_csv('vehicles.csv')
 
@@ -11,6 +12,31 @@ condition_arr = df["condition"].to_numpy()
 
 data = [price_arr, year_arr, manufacturer_arr, condition_arr]
 
+def quick_sort(array, low, high):
+    if low < high:
+        pivot = partition(array, low, high)
+        quick_sort(array, low, pivot - 1)
+        quick_sort(array, pivot + 1, high)
+
+def partition(array, low, high):
+    pivot = array[low]
+    up = low
+    down = high
+
+    while up < down:
+        for j in range(up, high):
+            if array[up] > pivot:
+                break
+            up += 1
+        for j in range(high, low, -1):
+            if array[down] < pivot:
+                break
+            down -= 1
+        if up < down:
+            array[up], array[down] = array[down], array[up]
+
+        array[low], array[down] = array[down], array[low]
+        return down
 
 def merge(arr, left, mid, right):
     # Create X ← arr[left..mid] & Y ← arr[mid+1..right]
@@ -92,6 +118,7 @@ def heapify(arr, n, i):
 def year(arr):
     heap_copy = arr.copy()
     merge_copy = arr.copy()
+    quick_copy = arr.copy()
     start = time.time()
     heap_sort(heap_copy, len(heap_copy))
     end = time.time()
@@ -124,7 +151,24 @@ def year(arr):
     for year in year_count_merge.keys():
         print(f"{year}: {year_count_merge[year]} cars")
 
-    if (merge_copy == heap_copy).all():
+    start = time.time()
+    n = len(quick_copy)
+    quick_sort(quick_copy, 0, n-1)
+    end = time.time()
+    length = end - start
+    print("\nQuick sort:", length, "seconds")
+
+    print("Number of cars for each year (Quick Sort):")
+    year_count_quick = {}
+    for x in quick_copy:
+        if x in year_count_quick:
+            year_count_quick[x] += 1
+        else:
+            year_count_quick[x] = 1
+    for year in year_count_quick.keys():
+        print(f"{year}: {year_count_quick[year]} cars")
+
+    if (merge_copy == quick_copy).all():
         print("\nSuccess\n")
     else:
         print("\nFailed\n")
@@ -151,10 +195,7 @@ def price(arr):
     for category in price_count_heap.keys():
         print(f"${category} - ${category + 9999}: {price_count_heap[category]} cars")
 
-    # prints out every price for heap copy (used for testing)
-    # print("\nPrices after Heap Sort:")
-    # for prices in heap_copy:
-    # print(prices)
+
 
     start = time.time()
     merge_sort(merge_copy, 0, len(merge_copy) - 1)
